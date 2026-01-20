@@ -32,7 +32,7 @@
   display: grid;
   gap: var(--space-8);
   justify-items: center;
-  min-height: 100vh;
+  min-height: 80vh;
   align-content: center;
 }
 
