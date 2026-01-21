@@ -44,10 +44,9 @@ function App() {
 
   useEffect(() => {
     const loadDailyNews = async () => {
-      const date = getYesterdayDate();
       try {
         const base = import.meta.env.BASE_URL;
-        const response = await fetch(`${base}feeds/daily/${date}.json`);
+        const response = await fetch(`${base}feeds/daily/latest.json`);
         if (!response.ok) throw new Error("Falha ao carregar JSON");
         const data = await response.json();
         setPayload(data);

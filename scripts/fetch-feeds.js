@@ -59,6 +59,12 @@ const isYesterday = (date) => {
   return date >= start && date <= end;
 };
 
+const isYesterdayByLocalDate = (date) => {
+  if (!date) return false;
+  const { start } = getYesterdayRange();
+  return toDateString(date) === toDateString(start);
+};
+
 const parseDate = (value) => {
   if (!value) return null;
   const date = new Date(value);
@@ -115,7 +121,7 @@ const normalizeItem = (block, sourceName) => {
     extractFirstTag(block, "description") || extractFirstTag(block, "summary");
 
   if (!title || !link || !date) return null;
-  if (!isYesterday(date)) return null;
+  if (!isYesterday(date) && !isYesterdayByLocalDate(date)) return null;
 
   const id = `${slugify(sourceName)}-${slugify(title)}-${toDateString(date)}`;
   return {
@@ -196,14 +202,8 @@ const run = async () => {
     articles,
   };
 
-  const dailyPath = path.join(DAILY_DIR, `${dailyPayload.date}.json`);
-  fs.writeFileSync(dailyPath, JSON.stringify(dailyPayload, null, 2));
-
-  const appDailyPath = path.join(
-    APP_PUBLIC_DAILY_DIR,
-    `${dailyPayload.date}.json`
-  );
-  fs.writeFileSync(appDailyPath, JSON.stringify(dailyPayload, null, 2));
+  const latestPath = path.join(APP_PUBLIC_DAILY_DIR, "latest.json");
+  fs.writeFileSync(latestPath, JSON.stringify(dailyPayload, null, 2));
 };
 
 run();
